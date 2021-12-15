@@ -7,10 +7,10 @@ import re
 import os
 import random
 
-from functools import reduce
-from operator import add, mul
+from functools import reduce, partial
+from operator import add, mul, itemgetter, attrgetter, methodcaller
 
-from collections import abc
+from collections import abc, namedtuple
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -45,7 +45,7 @@ def factorial(n: int) -> int:
 
 
 def __funcion_como_objeto() -> None:
-    print(f'-*- Función como objeto -*-')
+    print(f'\n-*- Función como objeto -*-')
 
     print(f'factorial(5)={factorial(5)}')
     print(f'factorial.__doc__={factorial.__doc__}')
@@ -58,7 +58,7 @@ def __funcion_como_objeto() -> None:
 
 
 def __high_order_function() -> None:
-    print(f'-*- Higher Order Function -*-')
+    print(f'\n-*- Higher Order Function -*-')
     fact = factorial
 
     list_factorial1 = list(map(fact, range(10)))
@@ -79,7 +79,7 @@ def __high_order_function() -> None:
 
 def __anonymous_functions() -> None:
 
-    print(f'-*- Anonymous functions -*-')
+    print(f'\n-*- Anonymous functions -*-')
     fruits = ['stawberry', 'fig', 'apple', 'cherry', 'raspberry', 'banana']
 
     print(f'fruits={fruits}')
@@ -89,7 +89,7 @@ def __anonymous_functions() -> None:
 
 
 def __callable_types() -> None:
-    print(f'-*- Callable types -*-')
+    print(f'\n-*- Callable types -*-')
     bingo = BingoCage(range(3))
     print(f'bingo.pick()={bingo.pick()}')
     print(f'bingo()={bingo()}')
@@ -98,7 +98,7 @@ def __callable_types() -> None:
 
 
 def __functions_annotations() -> None:
-    print(f'-*- Functions Annotations -*-')
+    print(f'\n-*- Functions Annotations -*-')
 
     def my_sum(oper_a: int, oper_b: int, plus: 'int > 0' = 10) -> int:
         '''
@@ -112,7 +112,7 @@ def __functions_annotations() -> None:
 
 
 def __module_operator() -> None:
-    print(f'-*- Module Operator -*-')
+    print(f'\n-*- Module Operator -*-')
 
     def fact1(n):
         return reduce(lambda a, b: a*b, range(1, n+1))
@@ -122,6 +122,52 @@ def __module_operator() -> None:
     def fact2(n):
         return reduce(mul, range(1, n+1))
     print(f'fact2(5)={fact2(5)}')
+
+    metro_data = [
+        ('Tokyo', 'JP', 36.933, (35.4684, 139.68434)),
+        ('Mexico City', 'MX', 16.933, (56.4684, 39.68434)),
+        ('Sao Paulo', 'BR', 26.93, (33.44252, -131.6454)),
+        ('Delhi NCR', 'In', 66.533, (39.47784, -99.68434)),
+        ('New York-Newark', 'US', 36.933, (22.2222, 33.3333))
+    ]
+
+    print(f'Ordenación de una lista por el campo de la posición 1 de las tuplas de una lista...')
+    for city in sorted(metro_data, key=itemgetter(1)):
+        print(f'city={city}')
+
+    print(f'Listado de los elementos seleccionados de las tuplas de una lista...')
+    cc_name = itemgetter(0, 1)
+    for city in metro_data:
+        print(f'cc_name(city)={cc_name(city)}')
+
+    # Creación de entidades y su estructura.
+    LatLong = namedtuple('LatLong', 'lat long')
+    Metropolis = namedtuple('Metropolis', 'name cc pop coord')
+    metro_areas = [
+        Metropolis(name, cc, pop, LatLong(lat, long)) for name, cc, pop, (lat, long) in metro_data
+    ]
+
+    # Acceso a los elementos de la lista creada.
+    print(f'-->>{metro_areas[1]}')
+    print(f'-->>{metro_areas[1].coord}')
+    print(f'-->>{metro_areas[1].coord.lat}')
+
+    # Ordenación de la lista por un atributo de la clase.
+    for city in sorted(metro_areas, key=attrgetter('coord.lat')):
+        print(f'city={city}')
+
+    # Ejemplo de uso de methodcaller
+    s = 'String de prueba'
+    upcase = methodcaller('upper')
+    print(f'upcase(s) == s.upper()?{upcase(s) == s.upper()}')
+
+    suss = methodcaller('replace', ' ', '-')
+    print(f'suss={suss(s)}')
+
+    # Ejemplo de partial
+    triple = partial(mul, 3)
+    print(f'triple={triple(7)}')
+    print(f'list(map(triple, range(1,10)))={list(map(triple, range(1,10)))}')
 
 
 def run() -> None:
