@@ -43,3 +43,38 @@ def clock(func):
         return result
 
     return clocked
+
+
+def decorator1(func):
+    '''
+    Definición de una función de decoradora la cual realiza la escritura de un mensaje por consola.
+    '''
+    print(f'[***] Entramos en la función decorator1')
+    return func
+
+
+def decorator2(func):
+    '''
+    Definición de una función de decoradora la cual realiza la escritura de un mensaje por consola.
+    '''
+    print(f'[***] Entramos en la función decorator2')
+    return func
+
+
+registry = set()
+
+
+def register(activate=True):
+
+    print(f'[+++] Entramos en register...')
+
+    def decorate(func):
+        print('running register(activate=%s)->decorate(%s)' % (activate, func))
+        if activate:
+            registry.add(func)
+        else:
+            registry.discard(func)
+
+        return func
+
+    return decorate
