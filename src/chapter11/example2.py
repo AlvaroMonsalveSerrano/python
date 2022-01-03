@@ -129,6 +129,8 @@ class TomboList(list):
     """Nos e realiza ninguna comprobación de la existencia total a parcial de las funciones 
     que se definen en la clase virtual.
 
+    La idea es definir una clase que hereda de otra y la implementación de las funciones 
+    definidas en el 'interface' Tombola. 
 
     """
 
