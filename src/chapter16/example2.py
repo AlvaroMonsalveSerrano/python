@@ -1,5 +1,5 @@
 """
-Módulo 1 con ejemplos corutinas
+Módulo 2 con ejemplos corutinas
 """
 import re
 import reprlib
@@ -183,4 +183,4 @@ if __name__ == '__main__':
     try:
         run()
     except Exception as ex:
-        logging.error(f'[ERROR] Example1. Exception=[{ex}]')
+        logging.error(f'[ERROR] Example2. Exception=[{ex}]')
