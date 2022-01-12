@@ -157,3 +157,5 @@ local.settings.json
 
 .vscode/
 .vscode/*
+
+downloads/
